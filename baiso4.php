@@ -8,6 +8,7 @@ include_once("nav.php")
 <?php
 include_once("model/contact.php");
 include_once("model/tag.php");
+include_once("model/contact_tag.php");
 $lsFromDB = Contact::getListContactFromDB();
 $lsTagFromDB = Tag::getListTagFromDB();
 
@@ -67,24 +68,18 @@ if (isset($_REQUEST["addTag"])) {
 }
 ?>
 
-
-<form action="" method="GET">
-
-    <div class="form-group">
-
-        <input class="form-control" name="search" style="max-width: 200px; display:inline-block;" placeholder="Search">
-
-    </div>
-
-</form>
-
 <?php
-if (isset($_POST["action"])) {
-    if ($_POST["action"] == 'delete') {
+if (isset($_REQUEST["action"])) {
+    if ($_REQUEST["action"] == 'delete') {
         Book::deleteBookFromDB($_POST["bookId"]);
     }
-    if ($_POST["action"] == 'edit') {
-        Book::editBookFromDb($_POST["bookId"], $_POST["title"], $_POST["price"], $_POST["author"], $_POST["year"]);
+    if ($_REQUEST["action"] == 'edit') {
+        echo $_REQUEST["id"];
+        echo $_REQUEST["name"];
+        echo $_REQUEST["email"];
+        echo $_REQUEST["phone"];
+        echo $_REQUEST["tag"];
+        Contact::editContactFromDb($_REQUEST["id"], $_REQUEST["name"], $_REQUEST["email"], $_REQUEST["phone"], $_REQUEST["tag"]);
     }
 }
 ?>
@@ -116,26 +111,33 @@ if (isset($_POST["action"])) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        <input type="hidden" name="id" class="form-control" placeholder="Nhap ten sach" value="<?php echo $contactItem->name; ?>">
                                         <label for="exampleInputEmail1">Name</label>
                                         <input type="text" name="name" class="form-control" placeholder="Nhap ten sach" value="<?php echo $contactItem->name; ?>">
                                         <label for="exampleInputEmail1">Email</label>
                                         <input type="text" name="email" class="form-control" placeholder="Enter ten tac gia" value="<?php echo $contactItem->email; ?>">
                                         <label for="exampleInputEmail1">Phone</label>
                                         <input type="text" name="phone" class="form-control" placeholder="Nhap nam xuat ban" value="<?php echo $contactItem->phone; ?>">
-                                        <label for="exampleInputEmail1">Tag</label>
-                                        <select name="tag" class="custom-select" id="inputGroupSelect01">
-                                            <option value="0" selected>Chọn tag</option>
-
-                                            <?php foreach ($lsTagFromDB as  $tagItem) { ?>
-
-
-                                                <option value="<?php echo $tagItem->name ?>"><?php echo $tagItem->name ?></option>
-
-
-                                            <?php } ?>
-
-
-                                        </select>
+                                        <label for="exampleInputEmail1">Tag</label><br />
+                                        <?php 
+                                        $lsContactTagOfEachContact = Contact_Tag::getListContact_TagOfEachContact($contactItem->id);
+                                        foreach ($lsTagFromDB as $tagItem) {
+                                            echo $tagItem->id;
+                                                if (in_array($tagItem->id, array_column($lsContactTagOfEachContact, 'idTag'))) {
+                                                    ?>
+                                                <span>
+                                                    <input checked type="checkbox" name="<?php echo $tagItem->id ?>" value="<?php echo $tagItem->id ?>">
+                                                    <label class="mr-3"><?php echo $tagItem->name ?></label>
+                                                </span>
+                                            <?php } else {
+                                                        ?>
+                                                <span>
+                                                    <input type="checkbox" name="<?php echo $tagItem->id ?>" value="<?php echo $tagItem->id ?>">
+                                                    <label class="mr-3"><?php echo $tagItem->name ?></label>
+                                                </span>
+                                        <?php
+                                                }
+                                            } ?>
                                     </div>
                                     <div class="modal-footer">
                                         <input type="hidden" name="contactId" value="<?php echo "$contactItem->id"; ?>" />

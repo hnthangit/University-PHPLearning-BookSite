@@ -6,17 +6,17 @@ class Contact {
     var $name;
     var $email;
     var $phone;
-    var $tag;
+    var $idUser;
     #end properties
 
     #Construct function
-    function __construct($id, $name, $email, $phone, $tag)
+    function __construct($id, $name, $email, $phone, $idUser)
     {
         $this->id = $id;
         $this->name = $name;
         $this->email= $email;
         $this->phone = $phone;
-        $this->tag = $tag;
+        $this->idUser = $idUser;
     }
 
     static function connect()
@@ -40,7 +40,7 @@ class Contact {
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 # code...
-                $contact = new Contact($row["Id"], $row["Name"], $row["Email"], $row["Phone"], $row["Tag"]);
+                $contact = new Contact($row["Id"], $row["Name"], $row["Email"], $row["Phone"], $row["IdUser"]);
                 array_push($lscontact, $contact);
             }
         }
@@ -49,7 +49,7 @@ class Contact {
         return $lscontact;
     }
 
-    static function addContactDb($name, $email, $phone, $tag)
+    static function addContactDb($name, $email, $phone, $idUser)
     {
         $con = Contact::connect();
         $sql = "INSERT INTO contact (Name, Email, Phone, Tag) VALUES ('$name', '$email', '$phone', $tag);";
@@ -61,11 +61,16 @@ class Contact {
         $con->close();
     }
 
-    static function editContactFromDb($contactId, $newName, $newEmail, $newPhone, $newTag)
+    static function editContactFromDb($contactId, $newName, $newEmail, $newPhone, $newTagId)
     {
+        var_dump( $newName + $newEmail+ $newPhone );
+        var_dump($contactId +$newTagId);
         $con = Contact::connect();
-        $sql = "UPDATE contact SET Name='$newName', Email='$newEmail', Phone='$newPhone', Tag='$newTag' WHERE ID=$contactId";
+        $sql = "UPDATE contact SET Name='$newName', Email='$newEmail', Phone='$newPhone', Tag=$newTagId WHERE Id=$contactId";
+        $con1 = Tag::connect();
+        $sql1 = "UPDATE tag SET Total=Total+1 WHERE Id='$newTagId'";
         if ($con->query($sql) == true) {
+            var_dump($con->query($sql));
             echo "Cập nhật thành công";
         } else {
             echo "Cập nhật thất bại";

@@ -1,19 +1,17 @@
 <?php 
-class Tag {
-
+class Contact_Tag {
 
     #Begin properties
-    var $id;
-    var $name;
-    var $total;
+    var $idContact;
+    var $idTag;
+
     #end properties
 
     #Construct function
-    function __construct($id, $name, $total)
+    function __construct($idContact, $idTag)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->total = $total;
+        $this->idContact = $idContact;
+        $this->idTag = $idTag;
     }
 
     static function connect()
@@ -26,30 +24,30 @@ class Tag {
         return $con;
     }
 
-    static function getListTagFromDB()
+    static function getListContact_TagOfEachContact($idContact)
     {
         //Bước1: tạo kếtCRUD
-        $con = Tag::connect();
+        $con = Contact_Tag::connect();
         //Bước2: Thao tác với CSDL: CRUD
-        $sql = "SELECT * FROM `tag`";
+        $sql = "SELECT * FROM `contact_tag` where IdContact = $idContact";
         $result = $con->query($sql);
-        $lsTag = array();
+        $lscontact_tag = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 # code...
-                $tag = new Tag($row["Id"], $row["Name"], $row["Total"]);
-                array_push($lsTag, $tag);
+                $contact_tag = new Contact_Tag($row["IdContact"], $row["IdTag"]);
+                array_push($lscontact_tag, $contact_tag);
             }
         }
         //Bước3: Đóng kết nối
         $con->close();
-        return $lsTag;
+        return $lscontact_tag;
     }
 
-    static function addTagDb($name)
+    static function addContact_TagDb($idContact, $idTag)
     {
-        $con = Tag::connect();
-        $sql = "INSERT INTO tag (Name, Total) VALUES ('$name', 0);";
+        $con = Contact_Tag::connect();
+        $sql = "INSERT INTO contact_tag (IdContact, IdTag) VALUES ($idContact, $idTag);";
         if ($con->query($sql) == true) {
             echo "Thêm thành công";
         } else {
@@ -57,5 +55,7 @@ class Tag {
         }
         $con->close();
     }
+
+
 }
 ?>
