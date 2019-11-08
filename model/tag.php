@@ -51,11 +51,24 @@ class Tag {
         $con = Tag::connect();
         $sql = "INSERT INTO tag (Name, Total) VALUES ('$name', 0);";
         if ($con->query($sql) == true) {
-            echo "Thêm thành công";
+            echo "Thêm tag thành công";
         } else {
-            echo "Thêm thất bại";
+            //echo "Thêm thất bại";
         }
         $con->close();
     }
+
+    static function changeTotal($idTag, $change)
+    {
+        $con = Tag::connect();
+        ($change==1) ? $sql = "UPDATE tag SET Total=Total+1 WHERE Id=$idTag" : $sql = "UPDATE tag SET Total=Total-1 WHERE Id=$idTag";
+        if ($con->query($sql) == true) {
+            //echo "Thêm tag thành công";
+        } else {
+           // echo "Thêm tag thất bại";
+        }
+        $con->close();
+    }
+
 }
 ?>

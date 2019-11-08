@@ -72,19 +72,13 @@ $lsTagFromDB = Tag::getListTagFromDB();
         <span>Thêm liên mới</span>
       </li>
 
-      <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Danh bạ</span>
-        </a>
-      </li>
       <li class="nav-item">
-        <a class="nav-link" href="baiso1.php">
+        <a class="nav-link" href="#">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Thường xuyên liên hệ</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="baiso2.php">
+        <a class="nav-link" href="#">
           <i class="fas fa-fw fa-table"></i>
           <span>Liên hệ trung lập</span></a>
       </li>
@@ -93,36 +87,23 @@ $lsTagFromDB = Tag::getListTagFromDB();
         <i class="fas fa-plus"></i>
         <span>Thêm tag mới</span>
       </li> 
-
+<form id="listtag">
       <?php foreach ($lsTagFromDB as  $tagItem) { ?>
 
       <li class="nav-item">
         <div class="nav-link">
-          <input type="checkbox" name="<?php $tagItem->name?>">
+          <input class="listtag3" id="listtag2" onclick="showContact(<?php echo $tagItem->id?>)" type="checkbox" name="listtag[]" value="<?php echo $tagItem->id?>">
           <span><?php echo $tagItem->name ?></span>
           <span class="float-right"><?php echo $tagItem->total ?></span>
           </div>
       </li>
       <?php } ?>
+      </form>
 
-
-
-
-
-      <li class="nav-item">
-        <a class="nav-link" href="baiso4.php">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Bai so 4</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="baiso4pagination.php">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Bai so 4 phan trang</span></a>
-      </li>
       <!-- Modal -->
       <div class="modal fade" id="addTag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <form>
+          <form method="post">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel1">Thêm liên hệ mới</h5>
@@ -160,13 +141,6 @@ $lsTagFromDB = Tag::getListTagFromDB();
                 <input type="text" name="email" class="form-control" placeholder="Nhập email">
                 <label for="exampleInputEmail1">Số điện thoại</label>
                 <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại">
-                <label for="exampleInputEmail1">Tag</label>
-                <select name="tag" class="custom-select" id="inputGroupSelect01">
-                  <option value="0" selected>Chọn tag</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>

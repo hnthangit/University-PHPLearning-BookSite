@@ -49,13 +49,24 @@ class Contact_Tag {
         $con = Contact_Tag::connect();
         $sql = "INSERT INTO contact_tag (IdContact, IdTag) VALUES ($idContact, $idTag);";
         if ($con->query($sql) == true) {
-            echo "Thêm thành công";
+            //echo "Thêm ct thành công";
         } else {
-            echo "Thêm thất bại";
+            //echo "Thêm ct thất bại";
         }
         $con->close();
     }
 
+    static function deleteContact_Tag($idContact, $idTag)
+    {
+        $con = Contact_Tag::connect();
+        $sql = "DELETE FROM `contact_tag` WHERE `IdContact`=$idContact and `IdTag`=$idTag";
+        if ($con->query($sql) == true) {
+            //echo "Xóa thành công";
+        } else {
+            //echo "Xóa thất bại";
+        }
+        $con->close();
+    }
 
 }
 ?>
